@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ST3215 舵机控制器</title>
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- 顶部连接栏 -->
+    <header id="connection-bar">
+      <h1>ST3215 舵机控制器</h1>
+      <div class="connection-controls">
+        <select id="port-select">
+          <option value="">选择串口...</option>
+        </select>
+        <button id="refresh-ports-btn" title="刷新串口">🔄</button>
+        <select id="baud-rate-select">
+          <option value="1000000" selected>1000000</option>
+          <option value="500000">500000</option>
+          <option value="250000">250000</option>
+          <option value="128000">128000</option>
+          <option value="115200">115200</option>
+          <option value="76800">76800</option>
+          <option value="57600">57600</option>
+          <option value="38400">38400</option>
+        </select>
+        <button id="connect-btn">连接</button>
+        <span id="connection-status" class="status-disconnected">未连接</span>
+      </div>
+      <div class="servo-id-controls">
+        <label>舵机ID:</label>
+        <input type="number" id="servo-id" value="1" min="0" max="253" />
+        <button id="ping-btn">Ping</button>
+        <button id="read-all-btn">读取全部</button>
+      </div>
+    </header>
+
+    <!-- 主内容区 -->
+    <main>
+      <!-- 左侧：实时状态 + 控制 -->
+      <section id="control-panel">
+        <div class="panel">
+          <h2>实时状态</h2>
+          <div id="status-display">
+            <div class="status-item">
+              <label>当前位置</label>
+              <span id="status-position">--</span>
+              <small>步</small>
+            </div>
+            <div class="status-item">
+              <label>当前速度</label>
+              <span id="status-speed">--</span>
+              <small>步/s</small>
+            </div>
+            <div class="status-item">
+              <label>当前负载</label>
+              <span id="status-load">--</span>
+              <small>‰</small>
+            </div>
+            <div class="status-item">
+              <label>当前电压</label>
+              <span id="status-voltage">--</span>
+              <small>V</small>
+            </div>
+            <div class="status-item">
+              <label>当前温度</label>
+              <span id="status-temp">--</span>
+              <small>°C</small>
+            </div>
+            <div class="status-item">
+              <label>当前电流</label>
+              <span id="status-current">--</span>
+              <small>mA</small>
+            </div>
+            <div class="status-item">
+              <label>移动状态</label>
+              <span id="status-moving">--</span>
+            </div>
+            <div class="status-item">
+              <label>错误状态</label>
+              <span id="status-error">--</span>
+            </div>
+          </div>
+          <div class="status-actions">
+            <button id="refresh-status-btn">刷新状态</button>
+            <label>
+              <input type="checkbox" id="auto-refresh" /> 自动刷新
+            </label>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>运动控制</h2>
+          <div class="control-group">
+            <label>目标位置 (步):</label>
+            <input type="range" id="target-position-slider" min="0" max="4095" value="2048" />
+            <input type="number" id="target-position" value="2048" min="-32766" max="32766" />
+          </div>
+          <div class="control-group">
+            <label>运行速度 (步/s):</label>
+            <input type="range" id="target-speed-slider" min="0" max="3400" value="1000" />
+            <input type="number" id="target-speed" value="1000" min="0" max="3400" />
+          </div>
+          <div class="control-group">
+            <label>加速度:</label>
+            <input type="range" id="target-acc-slider" min="0" max="254" value="0" />
+            <input type="number" id="target-acc" value="0" min="0" max="254" />
+          </div>
+          <div class="control-actions">
+            <button id="move-btn" class="btn-primary">移动</button>
+            <button id="torque-on-btn" class="btn-success">扭矩开</button>
+            <button id="torque-off-btn" class="btn-danger">扭矩关</button>
+            <button id="torque-damping-btn">阻尼模式</button>
+          </div>
+          <div class="quick-positions">
+            <label>快捷位置:</label>
+            <button class="quick-pos-btn" data-pos="0">0</button>
+            <button class="quick-pos-btn" data-pos="1024">1024</button>
+            <button class="quick-pos-btn" data-pos="2048">2048 (中)</button>
+            <button class="quick-pos-btn" data-pos="3072">3072</button>
+            <button class="quick-pos-btn" data-pos="4095">4095</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 右侧：寄存器表 -->
+      <section id="register-panel">
+        <div class="panel">
+          <h2>内存表 (寄存器)</h2>
+          <div class="register-filter">
+            <select id="register-filter-select">
+              <option value="all">全部</option>
+              <option value="EPROM">EPROM (掉电保存)</option>
+              <option value="SRAM">SRAM (实时)</option>
+              <option value="rw">可读写</option>
+              <option value="ro">只读</option>
+            </select>
+          </div>
+          <div class="register-table-container">
+            <table id="register-table">
+              <thead>
+                <tr>
+                  <th>地址</th>
+                  <th>名称</th>
+                  <th>字节</th>
+                  <th>当前值</th>
+                  <th>默认值</th>
+                  <th>范围</th>
+                  <th>单位</th>
+                  <th>存储</th>
+                  <th>权限</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="register-tbody">
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- 底部日志 -->
+    <footer id="log-panel">
+      <div class="log-header">
+        <h3>通讯日志</h3>
+        <button id="clear-log-btn">清除</button>
+      </div>
+      <div id="log-content"></div>
+    </footer>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

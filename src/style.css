@@ -1,0 +1,428 @@
+:root {
+  --bg-primary: #1a1a2e;
+  --bg-secondary: #16213e;
+  --bg-tertiary: #0f3460;
+  --accent: #e94560;
+  --accent-hover: #ff6b81;
+  --text-primary: #eee;
+  --text-secondary: #aaa;
+  --success: #2ecc71;
+  --danger: #e74c3c;
+  --warning: #f39c12;
+  --border: #2a2a4a;
+  --input-bg: #1e1e3e;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  height: 100vh;
+  overflow: hidden;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* 顶部连接栏 */
+header#connection-bar {
+  background: var(--bg-secondary);
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+
+header h1 {
+  font-size: 16px;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.connection-controls, .servo-id-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+select, input[type="number"] {
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+select:focus, input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+input[type="number"] {
+  width: 80px;
+}
+
+#servo-id {
+  width: 60px;
+}
+
+button {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  padding: 6px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s;
+}
+
+button:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+button:active {
+  transform: scale(0.97);
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  font-weight: bold;
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover);
+}
+
+.btn-success {
+  background: var(--success);
+  border-color: var(--success);
+  color: #fff;
+}
+
+.btn-success:hover {
+  background: #27ae60;
+}
+
+.btn-danger {
+  background: var(--danger);
+  border-color: var(--danger);
+  color: #fff;
+}
+
+.btn-danger:hover {
+  background: #c0392b;
+}
+
+.status-disconnected {
+  color: var(--danger);
+  font-weight: bold;
+  font-size: 13px;
+}
+
+.status-connected {
+  color: var(--success);
+  font-weight: bold;
+  font-size: 13px;
+}
+
+/* 主内容区 */
+main {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  gap: 0;
+}
+
+#control-panel {
+  width: 380px;
+  min-width: 380px;
+  overflow-y: auto;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border-right: 1px solid var(--border);
+}
+
+#register-panel {
+  flex: 1;
+  overflow: hidden;
+  padding: 12px;
+}
+
+.panel {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px;
+}
+
+.panel h2 {
+  font-size: 14px;
+  color: var(--accent);
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* 状态显示 */
+#status-display {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.status-item {
+  background: var(--bg-primary);
+  padding: 8px 10px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.status-item label {
+  font-size: 11px;
+  color: var(--text-secondary);
+  min-width: 56px;
+}
+
+.status-item span {
+  font-size: 16px;
+  font-weight: bold;
+  color: var(--accent);
+  font-family: "SF Mono", monospace;
+}
+
+.status-item small {
+  font-size: 10px;
+  color: var(--text-secondary);
+}
+
+.status-actions {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.status-actions label {
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-secondary);
+}
+
+/* 控制区域 */
+.control-group {
+  margin-bottom: 12px;
+}
+
+.control-group label {
+  font-size: 12px;
+  color: var(--text-secondary);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.control-group input[type="range"] {
+  width: 100%;
+  margin-bottom: 4px;
+  accent-color: var(--accent);
+}
+
+.control-group input[type="number"] {
+  width: 100%;
+}
+
+.control-actions {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.quick-positions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.quick-positions label {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.quick-pos-btn {
+  padding: 4px 10px;
+  font-size: 11px;
+}
+
+/* 寄存器表 */
+.register-filter {
+  margin-bottom: 10px;
+}
+
+.register-table-container {
+  overflow: auto;
+  max-height: calc(100vh - 260px);
+}
+
+#register-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+#register-table th {
+  background: var(--bg-tertiary);
+  padding: 8px 6px;
+  text-align: left;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+#register-table td {
+  padding: 6px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+
+#register-table tr:hover {
+  background: rgba(233, 69, 96, 0.08);
+}
+
+#register-table .addr {
+  font-family: "SF Mono", monospace;
+  color: var(--warning);
+}
+
+#register-table .value-cell {
+  font-family: "SF Mono", monospace;
+  font-weight: bold;
+}
+
+#register-table .eprom {
+  color: var(--warning);
+}
+
+#register-table .sram {
+  color: var(--success);
+}
+
+#register-table .readonly {
+  color: var(--text-secondary);
+}
+
+.reg-write-input {
+  width: 70px;
+  padding: 3px 6px;
+  font-size: 12px;
+}
+
+.reg-write-btn {
+  padding: 3px 8px;
+  font-size: 11px;
+}
+
+.reg-read-btn {
+  padding: 3px 8px;
+  font-size: 11px;
+}
+
+/* 日志面板 */
+footer#log-panel {
+  height: 150px;
+  min-height: 100px;
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+}
+
+.log-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.log-header h3 {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.log-header button {
+  padding: 2px 10px;
+  font-size: 11px;
+}
+
+#log-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 16px;
+  font-family: "SF Mono", "Courier New", monospace;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.log-entry {
+  color: var(--text-secondary);
+}
+
+.log-entry.send {
+  color: #5dade2;
+}
+
+.log-entry.receive {
+  color: var(--success);
+}
+
+.log-entry.error {
+  color: var(--danger);
+}
+
+.log-entry .time {
+  color: var(--text-secondary);
+  margin-right: 8px;
+}
+
+/* 滚动条 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}

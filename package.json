@@ -1,0 +1,30 @@
+{
+  "name": "st3215_servo_controller",
+  "version": "1.0.0",
+  "description": "ST3215 Servo Controller",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "tauri": "tauri"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CuiYao631/ST3215_Servo_Controller.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/CuiYao631/ST3215_Servo_Controller/issues"
+  },
+  "homepage": "https://github.com/CuiYao631/ST3215_Servo_Controller#readme",
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.11.1",
+    "vite": "^8.0.13"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^2.11.0"
+  }
+}
