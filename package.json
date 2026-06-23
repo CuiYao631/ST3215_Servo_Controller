@@ -22,6 +22,7 @@
   "homepage": "https://github.com/CuiYao631/ST3215_Servo_Controller#readme",
   "devDependencies": {
     "@tauri-apps/cli": "^2.11.1",
+    "esbuild": "^0.25.0",
     "vite": "^8.0.13"
   },
   "dependencies": {
